@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiadun.dispatch.mapper.DisWarningDataMapper">
+
+
+    <select id="selectSystemWarning" resultType="com.jiadun.dispatch.vo.disPersonnel.DisWarningVo">
+        SELECT
+        a.id,
+        a.`code`,
+        a.time,
+        a.newssource,
+        a.yjlx,
+        a.details,
+        b.target_dept_id AS deptId,
+        b.state,
+        b.continue_issued as continueIssued,
+        b.id as disDataOperationId
+        FROM
+        t_dis_warning_data a
+        LEFT JOIN t_dis_data_operation b ON a.id = b.data_id
+        where b.`type` = 2 AND b.dept_id is NULL AND b.user_id IS NULL
+        <if test="newssource!=null and newssource !=''">
+            and a.newssource = #{newssource}
+        </if>
+        <if test="state!=null and state !=''">
+            and b.state = #{state}
+        </if>
+
+    </select>
+
+
+    <select id="selectDeptWarning" resultType="com.jiadun.dispatch.vo.disPersonnel.DisWarningVo">
+        SELECT
+        a.id,
+        a.`code`,
+        a.time,
+        a.newssource,
+        a.yjlx,
+        a.details,
+        b.target_dept_id AS deptId,
+        b.state,
+        b.continue_issued as continueIssued,
+        b.id as disDataOperationId
+        FROM
+        t_dis_warning_data a
+        LEFT JOIN t_dis_data_operation b ON a.id = b.data_id
+        where b.`type` = 2 AND b.dept_id is NOT NULL AND  b.dept_id = #{deptId}
+        <if test="newssource!=null and newssource !=''">
+            and a.newssource = #{newssource}
+        </if>
+        <if test="state!=null and state !=''">
+            and b.state = #{state}
+        </if>
+
+
+    </select>
+
+    <select id="selectStaffWarning" resultType="com.jiadun.dispatch.vo.disPersonnel.DisWarningVo">
+        SELECT
+        a.id,
+        a.`code`,
+        a.time,
+        a.newssource,
+        a.yjlx,
+        a.details,
+        b.target_dept_id AS deptId,
+        b.state,
+        b.continue_issued as continueIssued,
+        b.id as disDataOperationId
+        FROM
+        t_dis_warning_data a
+        LEFT JOIN t_dis_data_operation b ON a.id = b.data_id
+        where b.`type` = 2  AND b.user_id IS  NULL  and  b.state = 2 AND b.dept_id =#{deptId} AND target_dept_id is null
+        <if test="newssource!=null and newssource !=''">
+            and a.newssource = #{newssource}
+        </if>
+        <if test="state!=null and state !=''">
+            and b.state = #{state}
+        </if>
+    </select>
+
+
+</mapper>

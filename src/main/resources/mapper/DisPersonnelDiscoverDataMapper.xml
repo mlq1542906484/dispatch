@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiadun.dispatch.mapper.DisPersonnelDiscoverDataMapper">
+
+
+    <select id="selectSystemPersonnelDiscovers" resultType="com.jiadun.dispatch.vo.disPersonnel.DisPersonnelVo">
+            SELECT
+                a.id,
+                a.`code`,
+                a.time,
+                a.newssource,
+                a.persontype,
+                a.`name`,
+                a.idcard,
+                b.target_dept_id AS deptId,
+                b.state,
+	            b.continue_issued as continueIssued,
+				b.id as disDataOperationId
+            FROM
+                t_dis_personnel_discover_data a
+            LEFT JOIN t_dis_data_operation b ON a.id = b.data_id
+        where b.`type` = 1 AND b.dept_id is NULL AND b.user_id IS NULL
+        <if test="newssource!=null and newssource !=''">
+            and a.newssource = #{newssource}
+        </if>
+        <if test="state!=null and state !=''">
+            and b.state = #{state}
+        </if>
+
+
+    </select>
+
+
+    <select id="selectDeptPersonnelDiscovers" resultType="com.jiadun.dispatch.vo.disPersonnel.DisPersonnelVo">
+        SELECT
+        a.id,
+        a.`code`,
+        a.time,
+        a.newssource,
+        a.persontype,
+        a.`name`,
+        a.idcard,
+        b.target_dept_id AS deptId,
+        b.state,
+        b.continue_issued as continueIssued,
+        b.id as disDataOperationId
+        FROM
+        t_dis_personnel_discover_data a
+        LEFT JOIN t_dis_data_operation b ON a.id = b.data_id
+        where b.`type` = 1 AND b.dept_id is NOT NULL AND  b.dept_id = #{deptId}
+        <if test="newssource!=null and newssource !=''">
+            and a.newssource = #{newssource}
+        </if>
+        <if test="state!=null and state !=''">
+            and b.state = #{state}
+        </if>
+
+
+    </select>
+
+    <select id="selectStaffPersonnelDiscovers" resultType="com.jiadun.dispatch.vo.disPersonnel.DisPersonnelVo">
+        SELECT
+        a.id,
+        a.`code`,
+        a.time,
+        a.newssource,
+        a.persontype,
+        a.`name`,
+        a.idcard,
+        b.target_dept_id AS deptId,
+        b.state,
+        b.continue_issued as continueIssued,
+        b.id as disDataOperationId
+        FROM
+        t_dis_personnel_discover_data a
+        LEFT JOIN t_dis_data_operation b ON a.id = b.data_id
+        where b.`type` = 1    AND b.user_id IS  NULL  and  (b.state = 2 or b.state = 5) AND b.dept_id =#{deptId} AND target_dept_id is null
+        <if test="newssource!=null and newssource !=''">
+            and a.newssource = #{newssource}
+        </if>
+        <if test="state!=null and state !=''">
+            and b.state = #{state}
+        </if>
+    </select>
+
+
+</mapper>

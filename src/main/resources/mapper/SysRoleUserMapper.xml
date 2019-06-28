@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiadun.dispatch.mapper.SysRoleUserMapper">
+
+    <select id="findRoleIds" resultType="java.lang.Long">
+        SELECT
+            sr.id
+        FROM
+            t_sys_role sr
+            LEFT JOIN t_sys_role_user sru ON sru.role_id = sr.id
+        WHERE
+            sru.user_id =1
+    </select>
+</mapper>

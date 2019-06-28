@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiadun.dispatch.mapper.DisAuditMapper">
+
+    <select id="getAudit" resultType="com.jiadun.dispatch.vo.dis.res.DisPersonnelDiscoverDataResVo">
+        SELECT
+          da.id audit_id,
+          da.audit_state,
+          da.result_content,
+          da.audit_date,
+          da.i_time,
+          d.*
+        FROM
+            t_dis_personnel_discover_data d
+        INNER JOIN t_dis_audit da ON da.user_id = #{userId}
+        AND da.type = 1
+        <if test="type != null and type == 1">
+            AND audit_state in (1,2)
+        </if>
+        <if test="type != null and type == 2">
+            AND audit_state = 3
+        </if>
+        AND d.id = da.data_id
+        <where>
+            <if test="newssource != null">
+                and d.newssource = #{newssource}
+            </if>
+
+        </where>
+
+
+    </select>
+
+
+</mapper>

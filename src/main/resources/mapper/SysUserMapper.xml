@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiadun.dispatch.mapper.SysUserMapper">
+    <select id="pageList" resultType="com.jiadun.dispatch.vo.sys.res.UserInfoVo">
+        SELECT
+            su.id,
+            su.account,
+            su.email,
+            su.gender,
+            su.i_time,
+            su.i_user createUser,
+            su.job_num,
+            su.`name`,
+            su.police_type_id,
+            su.tel,
+            sd.`name` deptName,
+            su.dept_id,
+            pt.`name` policeTypeName
+        FROM
+            t_sys_user su
+            LEFT JOIN t_sys_dept sd ON sd.id = su.dept_id
+            LEFT JOIN t_sys_police_type pt ON pt.id = su.police_type_id
+        WHERE
+            su.state ='1'
+    </select>
+    <select id="getLoginAreaType" resultType="java.lang.Integer">
+        SELECT
+          sd.type
+        FROM
+          t_sys_user su
+        LEFT JOIN
+          t_sys_dept sd
+        ON
+          su.dept_id = sd.id
+        WHERE
+          su.account = #{loginName}
+        AND
+          su.state = '1'
+    </select>
+</mapper>

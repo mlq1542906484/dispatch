@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiadun.dispatch.mapper.DisOperationResultMapper">
+
+    <select id="queryOperationResults" resultType="java.util.HashMap">
+        SELECT
+        a.id,
+        a.result_content as resultContent,
+        a.remark,
+        a.result_commit as resultCommit,
+        a.is_commit as isCommit,
+        a.operation_id AS operationId,
+        a.commit_user_id as commitUserId,
+        b.data_id as dataId,
+        b.p_id as pid,
+        b.dept_id as deptId,
+        b.accept_deadline as acceptDeadline,
+        b.continue_issued as continueIssued,
+        b.target_dept_id targetDeptId,
+        b.user_id as userId
+        FROM
+        t_dis_operation_result a
+        LEFT JOIN t_dis_data_operation b ON a.operation_id = b.id
+        WHERE  b.data_id = #{dataId}
+        and  b.type = #{type}
+
+    </select>
+
+
+</mapper>

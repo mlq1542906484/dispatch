@@ -1,0 +1,122 @@
+server:
+  port: 8000
+  context-path: /dispatch
+  tomcat:
+    max-threads: 500 # Maximum amount of worker threads.
+    min-spare-threads: 50 # Minimum amount of worker threads
+spring:
+  freemarker:
+    allow-request-override: false
+    allow-session-override: false
+    cache: true
+    charset: UTF-8
+    check-template-location: true
+    content-type: text/html
+    enabled: true
+    expose-request-attributes: false
+    expose-session-attributes: false
+    expose-spring-macro-helpers: true
+    prefer-file-system-access: true
+    suffix: .ftl
+    template-loader-path: classpath:/templates/
+  jackson:
+    default-property-inclusion: non_null
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: eagle123
+    url: jdbc:mysql://192.168.10.53:3306/dispatch?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false
+  redis:
+    host: 192.168.10.53
+    port: 6379
+    password:
+    database: 11
+  mvc:
+    result-pack-ignores:
+      - /dispatch/swagger-resources
+      - /dispatch/v2/
+      - /dispatch/getUser
+      - /dispatch/user
+      - /dispatch/oauth/token_key
+      - /dispatch/oauth/token
+      - /dispatch/oauth/authorize
+      - /dispatch/css/signin.css
+      - /dispatch/css/bootstrap.min.css
+  kafka:
+    bootstrap-servers: 192.168.10.54:6667,192.168.10.55:6667,192.168.10.56:6667
+    consumer:
+      group-id: dispatchGroup
+      auto-offset-reset: earliest #当消费者消费时 没有 offset时， latest(默认) 表示从最新的offset开始消费，earliest 表示从头开始消费 ,none 表示当前的组再kafka服务端必须要有偏移量
+
+#mybaits-plus配置，修改主键类型，mapper.xml、type 别名等
+mybatis-plus:
+  mapper-locations: classpath:/mapper/*Mapper.xml
+  typeAliasesPackage: com.jiadun.dispatch.entity
+  global-config:
+    #主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"全局唯一ID UUID";
+    id-type: 0
+    #字段策略 0:"忽略判断",1:"非 NULL 判断"),2:"非空判断"
+    field-strategy: 1
+    #驼峰下划线转换
+    db-column-underline: true
+    #刷新mapper 调试神器
+    refresh-mapper: true
+    #数据库大写下划线转换
+    #capital-mode: true
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: true
+token:
+  live-time: 300000
+urls:
+  anon:
+    - '/actuator/**'
+    - '/v2/api-docs'
+    - '/service/**'
+    - '/editor-app/**'
+    - '/task/view/*'
+    - '/process/resource/**'
+    - '/*.html'
+    - '/webjars/**'
+    - '/v2/**'
+    - '/swagger-resources/**'
+    - '/auth/**'
+    - '/sysUser/login'
+logging:
+  level:
+    com.jiadun.dispatch.mapper: debug
+#设置拦截器的集合下标
+security:
+  oauth2:
+    resource:
+      filter-order: 3
+oauth:
+  client:
+    details:
+      #客户端信息配置
+      client-id: dispatch-web-client
+      client-secret: Fz0gi1
+      grant-type: password
+      oauth-token-service-uri: http://192.168.13.8:${server.port}/dispatch/oauth/token
+
+
+swagger:
+  title: 指挥调度系统 Swagger API
+  description:
+  version: 2.0
+  license: Powered By 嘉遁数据
+  licenseUrl: http://jiadundata.com/
+  terms-of-service-url: http://jiadundata.com/
+  contact:
+    name: 大数据可视化部
+    email:
+  authorization:
+    name: OAuth
+    auth-regex: ^.*$
+    authorization-scope-list:
+      - scope: server
+        description: server all
+    token-url-list:
+      - ${oauth.client.details.oauth-token-service-uri}
+  base-package: com.jiadun.dispatch
