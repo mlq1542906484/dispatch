@@ -26,7 +26,7 @@
         <swagger.version>2.9.2</swagger.version>
         <fastjson.version>1.2.44</fastjson.version>
         <jjwt.version>0.9.0</jjwt.version>
-        <spring-security-oauth2.version>2.0.14.RELEASE</spring-security-oauth2.version>
+        <spring-security-oauth2.version>2.0.17.RELEASE</spring-security-oauth2.version>
         <fluent.validator.version>1.0.6</fluent.validator.version>
         <fit.version>0.0.2.47</fit.version>
         <oss.version>3.1.0</oss.version>
